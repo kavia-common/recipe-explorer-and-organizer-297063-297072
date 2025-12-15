@@ -1,6 +1,6 @@
 # Recipe App Frontend (React)
 
-Modern, lightweight React UI for browsing, searching, and saving recipes with a monochrome (black-and-white) theme.
+Modern, lightweight React UI for browsing, searching, and saving recipes with a light theme and blue/cyan accents.
 
 ## Features
 - Responsive layout: header with navigation, search bar, sidebar for categories/ingredients, main recipe grid, favorites view.
@@ -38,16 +38,13 @@ If a request fails (404/500/network), the app falls back to local mock data for 
 - `npm run build` — Production build
 
 ## Styling
-Monochrome theme variables (defined in `src/index.css`):
-- `--primary`: `#111111`
-- `--primary-600`: `#000000`
-- `--success`: `#333333`
-- `--secondary`: `#666666`
-- `--error`: `#222222`
-- `--bg`: `#f7f7f7`
-- `--surface`: `#ffffff`
-- `--text`: `#111111`
-- `--border`: `#dddddd`
-- `--muted`: `#7a7a7a`
+Light theme with:
+- Primary: `#3b82f6`
+- Success/Accent: `#06b6d4`
+- Secondary: `#64748b`
+- Error: `#EF4444`
+- Background: `#f9fafb`
+- Surface: `#ffffff`
+- Text: `#111827`
 
-Most component styles are in `src/components/styles.css` and use only grayscale values with accessible contrast, including hover and focus states.
+Most styles are in `src/components/styles.css`.
