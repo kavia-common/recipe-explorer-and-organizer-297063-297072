@@ -1,48 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import './index.css';
+import { AppProviders } from './context/AppProviders';
+import Header from './components/Header';
+import Sidebar from './components/Sidebar';
+import RecipeGrid from './components/RecipeGrid';
+import RecipeDetailModal from './components/RecipeDetailModal';
+import Favorites from './components/Favorites';
+import { useUIState } from './hooks/useUIState';
+
+/**
+ * Root application shell composing header, sidebar, main content and modals.
+ * Uses React Contexts for auth, favorites, notes, recipes, and UI state.
+ */
+function AppShell() {
+  const { view } = useUIState();
+  return (
+    <div className="app-root">
+      <Header />
+      <div className="app-content">
+        <Sidebar />
+        <main className="main-area" role="main" aria-live="polite">
+          {view === 'favorites' ? <Favorites /> : <RecipeGrid />}
+        </main>
+      </div>
+      <RecipeDetailModal />
+    </div>
+  );
+}
 
 // PUBLIC_INTERFACE
 function App() {
-  const [theme, setTheme] = useState('light');
-
-  // Effect to apply theme to document element
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
-
-  // PUBLIC_INTERFACE
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
-  };
-
+  /** Wrap the entire app in providers for state and theming. */
   return (
-    <div className="App">
-      <header className="App-header">
-        <button 
-          className="theme-toggle" 
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-        >
-          {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
-        </button>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          Current theme: <strong>{theme}</strong>
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppProviders>
+      <AppShell />
+    </AppProviders>
   );
 }
 
