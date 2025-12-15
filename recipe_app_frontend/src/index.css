@@ -1,21 +1,56 @@
 :root {
-  /* Monochrome theme palette */
-  --primary: #111111;         /* primary accent (near-black) */
-  --primary-600: #000000;     /* darker primary for hover/active */
-  --success: #333333;         /* reused as darker gray accent */
-  --secondary: #666666;       /* medium gray for secondary text */
-  --error: #222222;           /* use dark gray for destructive accent */
-  --bg: #f7f7f7;              /* app background (very light gray) */
-  --surface: #ffffff;         /* surface elements */
-  --text: #111111;            /* main text color (near-black) */
-  --border: #dddddd;          /* borders */
-  --muted: #7a7a7a;           /* muted text */
-  --focus-ring: #33333322;    /* subtle focus ring */
-  --shadow: 0 10px 15px -3px rgba(0,0,0,0.12), 0 4px 6px -2px rgba(0,0,0,0.08);
+  /* Playful, vibrant theme palette (light) */
+  --primary: #3b82f6;         /* bright blue */
+  --primary-600: #2563eb;     /* deeper blue for hover */
+  --secondary: #64748b;       /* slate for secondary text */
+  --success: #06b6d4;         /* cyan accent */
+  --error: #ef4444;           /* red */
+
+  --bg: #f9fafb;              /* soft off-white */
+  --surface: #ffffff;         /* surfaces */
+
+  --text: #111827;            /* high-contrast text */
+  --border: #e5e7eb;          /* soft borders */
+  --muted: #6b7280;           /* muted text */
+
+  /* Focus + effects */
+  --focus-ring: rgba(59, 130, 246, 0.40);
+  --shadow: 0 10px 22px -10px rgba(17, 24, 39, 0.28), 0 6px 12px -8px rgba(17, 24, 39, 0.16);
+
+  /* Gradients + overlays used by shared components */
+  --primary-gradient: linear-gradient(135deg, #3b82f6, #06b6d4);
+  --primary-gradient-hover: linear-gradient(135deg, #2563eb, #0891b2);
+  --ring-surface: rgba(255, 255, 255, 0.70);
+  --overlay: rgba(17, 24, 39, 0.55);
+}
+
+/* Dark theme support via ThemeContext (data-theme="dark") */
+:root[data-theme="dark"] {
+  --primary: #60a5fa;
+  --primary-600: #3b82f6;
+  --secondary: #cbd5e1;
+  --success: #22d3ee;
+  --error: #fb7185;
+
+  --bg: #0b1220;
+  --surface: #0f172a;
+
+  --text: #e5e7eb;
+  --border: rgba(148, 163, 184, 0.22);
+  --muted: #94a3b8;
+
+  --focus-ring: rgba(96, 165, 250, 0.55);
+  --shadow: 0 14px 28px -14px rgba(0, 0, 0, 0.70), 0 10px 16px -14px rgba(0, 0, 0, 0.50);
+
+  --primary-gradient: linear-gradient(135deg, #60a5fa, #22d3ee);
+  --primary-gradient-hover: linear-gradient(135deg, #3b82f6, #06b6d4);
+  --ring-surface: rgba(15, 23, 42, 0.70);
+  --overlay: rgba(2, 6, 23, 0.65);
 }
 
 * { box-sizing: border-box; }
 html, body, #root { height: 100%; }
+
 body {
   margin: 0;
   background: var(--bg);
@@ -24,9 +59,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 a { color: inherit; text-decoration: none; }
 button { font: inherit; }
 input { font: inherit; }
+
 code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
