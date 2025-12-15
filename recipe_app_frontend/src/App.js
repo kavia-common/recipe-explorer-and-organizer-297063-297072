@@ -7,6 +7,7 @@ import Sidebar from './components/Sidebar';
 import RecipeGrid from './components/RecipeGrid';
 import RecipeDetailModal from './components/RecipeDetailModal';
 import Favorites from './components/Favorites';
+import PageTransition from './components/PageTransition';
 import { useUIState } from './hooks/useUIState';
 
 /**
@@ -21,7 +22,9 @@ function AppShell() {
       <div className="app-content">
         <Sidebar />
         <main className="main-area" role="main" aria-live="polite">
-          {view === 'favorites' ? <Favorites /> : <RecipeGrid />}
+          <PageTransition transitionKey={view}>
+            {view === 'favorites' ? <Favorites /> : <RecipeGrid />}
+          </PageTransition>
         </main>
       </div>
       <RecipeDetailModal />
