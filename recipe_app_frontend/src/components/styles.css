@@ -107,10 +107,153 @@ html, body, #root { height: 100%; background: var(--bg); color: var(--text); }
   }
 }
 
-/* Respect accessibility settings */
+/* -------------------------------------------------------------------------- */
+/* Micro-interactions: modal + dropdown                                        */
+/* - Snappy (180–260ms)                                                        */
+/* - transform/opacity/filter only (no height animations)                      */
+/* - Respects prefers-reduced-motion                                           */
+/* -------------------------------------------------------------------------- */
+
+/* Modal: animated backdrop (fade-in + slight blur) */
+@keyframes modalBackdropIn {
+  0% { opacity: 0; filter: blur(0px); }
+  100% { opacity: 1; filter: blur(2px); }
+}
+@keyframes modalBackdropOut {
+  0% { opacity: 1; filter: blur(2px); }
+  100% { opacity: 0; filter: blur(0px); }
+}
+
+/* Modal surface: fade + slight scale/slide with a soft themed glow */
+@keyframes modalIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+    filter:
+      drop-shadow(0 22px 36px rgba(59, 130, 246, 0))
+      drop-shadow(0 12px 24px rgba(6, 182, 212, 0));
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(0) scale(1.01);
+    filter:
+      drop-shadow(0 22px 36px rgba(59, 130, 246, 0.16))
+      drop-shadow(0 12px 24px rgba(6, 182, 212, 0.12));
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter:
+      drop-shadow(0 22px 36px rgba(59, 130, 246, 0.12))
+      drop-shadow(0 12px 24px rgba(6, 182, 212, 0.10));
+  }
+}
+@keyframes modalOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter:
+      drop-shadow(0 22px 36px rgba(59, 130, 246, 0.12))
+      drop-shadow(0 12px 24px rgba(6, 182, 212, 0.10));
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.99);
+    filter:
+      drop-shadow(0 22px 36px rgba(59, 130, 246, 0))
+      drop-shadow(0 12px 24px rgba(6, 182, 212, 0));
+  }
+}
+
+/* Dropdown panel: pop/scale + fade + slight y-translate with shadow bloom */
+@keyframes dropdownIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.985);
+    filter:
+      drop-shadow(0 18px 22px rgba(17, 24, 39, 0))
+      drop-shadow(0 10px 16px rgba(59, 130, 246, 0));
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(0) scale(1.01);
+    filter:
+      drop-shadow(0 18px 22px rgba(17, 24, 39, 0.22))
+      drop-shadow(0 10px 16px rgba(59, 130, 246, 0.10));
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter:
+      drop-shadow(0 18px 22px rgba(17, 24, 39, 0.18))
+      drop-shadow(0 10px 16px rgba(59, 130, 246, 0.08));
+  }
+}
+@keyframes dropdownOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter:
+      drop-shadow(0 18px 22px rgba(17, 24, 39, 0.18))
+      drop-shadow(0 10px 16px rgba(59, 130, 246, 0.08));
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.99);
+    filter:
+      drop-shadow(0 18px 22px rgba(17, 24, 39, 0))
+      drop-shadow(0 10px 16px rgba(59, 130, 246, 0));
+  }
+}
+
+/* Dropdown item: subtle staggered entrance (max ~40ms per item via inline delay) */
+@keyframes dropdownItemIn {
+  0% { opacity: 0; transform: translateY(-3px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Applied by components */
+.modal-backdrop.mi-enter { animation: modalBackdropIn 220ms ease-out both; }
+.modal-backdrop.mi-exit  { animation: modalBackdropOut 180ms ease-in both; }
+
+.modal.mi-enter { animation: modalIn 240ms cubic-bezier(0.2, 0.9, 0.2, 1) both; }
+.modal.mi-exit  { animation: modalOut 200ms cubic-bezier(0.3, 0.0, 0.2, 1) both; }
+
+.dropdown-panel.mi-enter { animation: dropdownIn 220ms cubic-bezier(0.2, 0.9, 0.2, 1) both; }
+.dropdown-panel.mi-exit  { animation: dropdownOut 180ms cubic-bezier(0.3, 0.0, 0.2, 1) both; }
+
+.dropdown-item.mi-enter {
+  animation: dropdownItemIn 180ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+}
+
+/* Springy hover/focus inside overlays */
+.modal .btn:hover,
+.modal .icon-btn:hover {
+  transform: translateY(-1px) scale(1.015);
+}
+.modal .btn:active,
+.modal .icon-btn:active {
+  transform: translateY(0) scale(0.992);
+}
+.modal .btn:focus-visible,
+.modal .icon-btn:focus-visible {
+  /* Slight "bloom" while preserving focus ring visibility */
+  box-shadow:
+    0 12px 22px -18px rgba(37, 99, 235, 0.55),
+    0 0 0 6px color-mix(in srgb, var(--focus-ring) 45%, transparent);
+}
+
+/* Reduced motion: disable micro-interaction animations */
 @media (prefers-reduced-motion: reduce) {
   .page-transition.pt-enter,
-  .page-transition.pt-exit {
+  .page-transition.pt-exit,
+  .modal-backdrop.mi-enter,
+  .modal-backdrop.mi-exit,
+  .modal.mi-enter,
+  .modal.mi-exit,
+  .dropdown-panel.mi-enter,
+  .dropdown-panel.mi-exit,
+  .dropdown-item.mi-enter {
     animation: none !important;
     transform: none !important;
     opacity: 1 !important;
@@ -382,6 +525,56 @@ html, body, #root { height: 100%; background: var(--bg); color: var(--text); }
 
 .detail-summary { color: var(--secondary); }
 .ingredients { margin: 0; padding-left: 18px; }
+
+/* Dropdown/Menu (shared) */
+.dropdown-root { position: relative; display: inline-flex; }
+.dropdown-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 20;
+
+  min-width: 220px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 8px;
+
+  box-shadow: 0 18px 34px -24px rgba(17, 24, 39, 0.55);
+  transform-origin: 85% 0%;
+  will-change: transform, opacity, filter;
+  contain: paint;
+}
+.dropdown-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+
+.dropdown-item-btn {
+  width: 100%;
+  text-align: left;
+
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text);
+
+  padding: 9px 10px;
+  border-radius: 14px;
+  cursor: pointer;
+
+  transition: transform .14s ease, background-color .14s ease, border-color .14s ease, box-shadow .14s ease;
+}
+.dropdown-item-btn:hover {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.22);
+  transform: translateY(-1px);
+}
+.dropdown-item-btn:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+.dropdown-item-btn[aria-disabled="true"],
+.dropdown-item-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
 
 /* Empty and pages */
 .empty { padding: 32px; color: var(--secondary); text-align: center; }
